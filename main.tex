@@ -241,7 +241,42 @@ nofootinbib,
         It can be seen that the DLP method results in a higher total secondary air-kerma estimate of 6.14 mGy/week compared to the $_n\mathrm{CTDI}_{100}$ method estimation of \qty{1.66}{mGy/week}. Even with this factor of $\sim$4 difference, the conservative DLP method still results in a lead thickness of only \qty{0.32}{mm} (or \qty{38.07}{mm} concrete thickness) which is smaller than the shielding standard of \qty{0.59}{mm}. This calculation confirms the CTDI result that standard shielding practices utilizing a \qty{0.59}{mm} lead barrier are appropriate for the CT sim room investigated. 
 
 \section{Brachytherapy Room and Maze}
+    \subsection{Does the decrease in activity from \SI{10}{Ci} to \SI{5}{Ci} impact the workload of treating 20 patients per week, with an average treatment time of 5 minutes per patient, using the new source?}
+    We calculate the workload using
+    \begin{align}
+        W &= f A \Gamma_x t_w,
+    \end{align}
+    where $W$ is the workload, $f = \qty{1}{cGy/R.m^2}$ and relates R to cGy, $A$ is the source strength/activity, $\Gamma_x = \SI{0.48}{R.m^2/Ci.hr}$ is the exposure rate constant for $^{192}\mathrm{Ir}$, and $t_w = \left( \qty{20}{patients/week} \right)\left(\qty{5}{min}\right) = \qty{1.67}{hr}$ is the integrated treatment time per week for all patients. For a source strength of \SI{10}{Ci}, we have,
+    \begin{align*}
+        W &= \left(\qty{1}{cGy/R.m^2}\right)(\left( \SI{10}{Ci} \right) \left( \SI{0.48}{R.m^2/Ci.hr} \right) \left( \qty{1.67}{hr/week} \right) \\
+        &= \qty{8.00}{cGy/week}.
+    \end{align*}
+    Now, we assume that the transmission through the patient is 20\%, giving a total workload of \qty{1.60}{cGy/week}. With $A = \SI{5}{Ci}$, this is halved to be $W = \qty{0.80}{cGy/week}$, however a lower source activity also means that treatment times are longer to deliver the same patient dose, so the workload would not actually change.
 
+    \subsection{Determine the necessary lead shielding for all barriers.}
+    Here we use the barrier transmission factor $B$,
+    \begin{align}
+        B = \frac{Pd^2}{WTU},
+    \end{align}
+    where $P = \qty{0.02}{mSv/week}$ is the dose allowed in the room for an uncontrolled area, or $P = \qty{0.1}{mSv/week}$ $d$ is the distance from the source to the wall, $W$ is the workload calculated earlier, $T$ is the occupancy factor, and $U$ is the use factor. We consider here the north (N), east (E), south (S), and western (W) walls with distances from the source of $d_\mathrm{N} = \qty{1.5}{m}$, $d_\mathrm{E} = \qty{1.0}{m}$, $d_\mathrm{S} = \qty{4.5}{m}$, $d_\mathrm{W} = \qty{3.75}{m}$. $B_i$ is then:
+    \begin{align*}
+        B_{\mathrm{N}} &= \frac{\left(\qty{0.01}{cGy/week}\right)\left(\qty{1.5}{m}\right)^2}{\left(\qty{1.60}{cGy/week}\right)\left(1.0\right)\left( 1 \right)}\\
+        &= \qty{0.141}{m^2} \\ \\
+        B_{\mathrm{E}} &= \frac{\left(\qty{0.002}{cGy/week}\right)\left(\qty{1.0}{m}\right)^2}{\left(\qty{1.60}{cGy/week}\right)\left(0.25\right)\left( 1 \right)}\\
+        &= \qty{0.005}{m^2} \\ \\ 
+        B_{\mathrm{S}} &= \frac{\left(\qty{0.002}{cGy/week}\right)\left(\qty{4.5}{m}\right)^2}{\left(\qty{1.60}{cGy/week}\right)\left(0.50\right)\left( 1 \right)}\\
+        &= \qty{0.506}{m^2} \\ \\ 
+        B_{\mathrm{W}} &= \frac{\left(\qty{0.01}{cGy/week}\right)\left(\qty{3.75}{m}\right)^2}{\left(\qty{1.60}{cGy/week}\right)\left(0.50\right)\left( 1 \right)}\\
+        &= \qty{0.176}{m^2} \\ \\ 
+    \end{align*}
+    Now we simply find the thickness of the required lead via Figure \ref{lead_thicc}, taken from the NCRP 49 report \cite{simmons1978structural}. We find that the thicknesses of lead, $T_{i}$, for each wall are $T_\mathrm{N} = \qty{3.6}{cm}$, $T_\mathrm{E} = \qty{2.4}{cm}$, $T_\mathrm{S} = \qty{1.4}{cm}$, $T_\mathrm{W} = \qty{1.8}{cm}$. The western wall, however, will have shielding for the LINAC, which is thicker than the required amount for brachytherapy. 
+    \begin{figure}[h!]
+        \centering
+        \includegraphics[width=0.75\linewidth]{figures/image.png}
+        \label{lead_thicc}
+    \end{figure}
+
+    
 \section{Conclusion}
 
 \bibliography{bib}
