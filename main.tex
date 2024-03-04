@@ -125,6 +125,52 @@ nofootinbib,
 
 \section{Introduction}
 \section{LINAC Primary and Secondary Barriers}
+    \subsection{Controlled and uncontrolled areas}
+    \begin{figure}[h!]
+        \centering
+        \includegraphics[width=0.75\linewidth]{figures/controlled areas.png}
+        \caption{Controlled and uncontrolled areas for the radiation therapy treatment center}
+        \label{controll}
+    \end{figure}
+
+    \subsection{Occupancy factor (T) for each room}
+    
+    \subsection{If this clinic treats 25 patients a day, each getting 225\hspace{0.85pt}cGy at ISO, calculate the facility's weekly workload.}
+    Workload is simply the total dose delivered per week, for all patients, and can be calculated as the product of the number of days per week $Y$, the number of patients treated $N$, and the absorbed dose per patient $D$:
+    \begin{align}
+        W &= YND.
+    \end{align}
+    In our case we have the clinical operating for 5 days a week, 25 patients per day, and \SI{2.25}{Gy/patient}. This gives a workload of $W = \SI{281.25}{Gy/wk}$. 
+    
+    \subsection{Identify the primary barriers.}
+    \begin{figure}[h!]
+        \centering
+        \includegraphics[width=0.75\linewidth]{figures/barriers.png}
+        \caption{Primary and secondary barriers inside the LINAC vault. }
+        \label{barriers}
+    \end{figure}
+
+    \subsection{Work out the use factor (U) for each wall in the vault.}
+    The wall to the east is slightly thicker than the wall to the west, which implies WBI treatment gantry rotation is to the opposite side of the wall. Dr. Ebrahimi stated that we should account for TBI having a higher dose since the distance is farther, but above he states that each patient receives the same dose. Therefore, we calculate the use factor $\mathrm{U_L}$ for the eastern (E) and western (W) walls separately, by summing the the 
+    \begin{align*}
+        \mathrm{U_E} &= \\
+        \mathrm{U_W} &= 
+    \end{align*}
+
+    \subsection{Find the attenuation (1-transmission) factor for the primary barriers}
+    The attenuation/barrier transmission factor can be calculated as
+    \begin{align}
+        B = \frac{Pd^2}{WTU}
+    \end{align}
+    where $P = \qty{0.1}{mSv/wk}$ is the dose allowed in this  area, or $P = \qty{0.1}{mSv/week}$ $d$ is the distance from the source to the wall, $W$ is the workload calculated earlier, $T$ is the occupancy factor, and $U$ is the use factor. $d$ was calculated as \qty{5}{m} plus  For the eastern and western walls we have (assuming \qty{1}{Gy} = \qty{1}{Sv}),
+    \begin{align*}
+        B_\mathrm{L} &=  \frac{\left( \qty{0.0001}{Sv/wk} \right)\left( \qty{5.3}{m^2} \right)}{\left( \qty{281.25}{Gy/wk} \right)\left( 0.5 \right)\left( 0.35 \right)} \\
+        &= \SI{5.71e-5}{m^2} \\ \\ 
+        B_\mathrm{R} &=  \frac{\left( \qty{0.0001}{Sv/wk} \right)\left( \qty{5.3}{m^2} \right)}{\left( \qty{281.25}{Gy/wk} \right)\left( 0.5 \right)\left( 0.45 \right)} \\
+        &= \SI{4.44e-5}{m^2}       
+    \end{align*}
+    
+    
 \section{LINAC Maze and CT Simulation}
     \subsection{Problem Description and Assumptions}
         A $\SI{350}{mm} \times \SI{350}{mm}$ CT sim control room is adjacent to a $\SI{700}{mm} \times \SI{550}{mm}$ CT sim vault. Workload and CT specifications are depicted in Table \ref{CT_spec}. Considering the facility is on a single level, floor and ceiling shielding is not required. Additionally, we assume the facility is not in proximity to any sidewalks with pedestrian traffic, negating the need for external wall shielding. The only remaining walls to consider is that adjacent to the LINAC room and the sim vault.
@@ -254,7 +300,7 @@ nofootinbib,
     Now, we assume that the transmission through the patient is 20\%, giving a total workload of \qty{1.60}{cGy/week}. With $A = \SI{5}{Ci}$, this is halved to be $W = \qty{0.80}{cGy/week}$, however a lower source activity also means that treatment times are longer to deliver the same patient dose, so the workload would not actually change.
 
     \subsection{Determine the necessary lead shielding for all barriers.}
-    Here we use the barrier transmission factor $B$,
+    Here we again use the barrier transmission factor $B$,
     \begin{align}
         B = \frac{Pd^2}{WTU},
     \end{align}
@@ -269,11 +315,10 @@ nofootinbib,
         B_{\mathrm{W}} &= \frac{\left(\qty{0.01}{cGy/week}\right)\left(\qty{3.75}{m}\right)^2}{\left(\qty{1.60}{cGy/week}\right)\left(0.50\right)\left( 1 \right)}\\
         &= \qty{0.176}{m^2} \\ \\ 
     \end{align*}
-    Now we simply find the thickness of the required lead via Figure \ref{lead_thicc}, taken from the NCRP 49 report \cite{simmons1978structural}. We find that the thicknesses of lead, $T_{i}$, for each wall are $T_\mathrm{N} = \qty{3.6}{cm}$, $T_\mathrm{E} = \qty{2.4}{cm}$, $T_\mathrm{S} = \qty{1.4}{cm}$, $T_\mathrm{W} = \qty{1.8}{cm}$. The western wall, however, will have shielding for the LINAC, which is thicker than the required amount for brachytherapy. 
+    Now we simply find the thickness of the required lead via Figure 11, taken from the NCRP 49 report \cite{simmons1978structural}. We find that the thicknesses of lead, $T_{i}$, for each wall are $T_\mathrm{N} = \qty{3.6}{cm}$, $T_\mathrm{E} = \qty{2.4}{cm}$, $T_\mathrm{S} = \qty{1.4}{cm}$, $T_\mathrm{W} = \qty{1.8}{cm}$. The western wall, however, will have shielding for the LINAC, which is thicker than the required amount for brachytherapy. 
     \begin{figure}[h!]
         \centering
         \includegraphics[width=0.75\linewidth]{figures/image.png}
-        \label{lead_thicc}
     \end{figure}
 
     
