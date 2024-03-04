@@ -172,6 +172,21 @@ nofootinbib,
     
     
 \section{LINAC Maze and CT Simulation}
+    In general, approximations were done as such that the numerator was overestimated and the denominator was underestimated. Note these values were calculated with W = 300 Gy/wk, but this does not account for an increased contribution of TBI to this measurement. Based on this, W is roughly 1000 Gy/wk. This would apply a multiplier of 3.33 to all our dose calculations. To account for this, we would have to increase the thickness of the maze wall to decrease $\mathrm{H_{LT}}$ (direct leakage through maze wall) in the same way as shown below. The general calculation accounts for four sources of radiation and then multiplies the sum of these four sources by an empirical factor.
+    \begin{align*}
+        \text{Dose equivalent } \mathrm{H_{tot}} &=  2.6\left[\text{wall scatter + patient scatter + leakage scatter + direct leakage} \right]\\
+        &= 2.6 \mathrm{H_G} \\
+        &= 2.6 \left[\mathrm{H_S + H_{PS} + H_{LS} + H_{LT}} \right]
+    \end{align*}
+
+    For wall scatter:
+    
+    \begin{align*}
+        \mathrm{H_S} &= \frac{(\SI{300}{Gy/wk})(0.35)(.02)(\qty{.8}{m^2})(0.005)(\qty{8.8}{m^2})}{\left[(\qty{2.5}{m})(\qty{5}{m})(\qty{5}{m})\right]^2} \\
+         &= \SI{6.1e-5}{Sv/wk}
+    \end{align*}
+
+    
     \subsection{Problem Description and Assumptions}
         A $\SI{350}{mm} \times \SI{350}{mm}$ CT sim control room is adjacent to a $\SI{700}{mm} \times \SI{550}{mm}$ CT sim vault. Workload and CT specifications are depicted in Table \ref{CT_spec}. Considering the facility is on a single level, floor and ceiling shielding is not required. Additionally, we assume the facility is not in proximity to any sidewalks with pedestrian traffic, negating the need for external wall shielding. The only remaining walls to consider is that adjacent to the LINAC room and the sim vault.
         
@@ -315,12 +330,30 @@ nofootinbib,
         B_{\mathrm{W}} &= \frac{\left(\qty{0.01}{cGy/week}\right)\left(\qty{3.75}{m}\right)^2}{\left(\qty{1.60}{cGy/week}\right)\left(0.50\right)\left( 1 \right)}\\
         &= \qty{0.176}{m^2} \\ \\ 
     \end{align*}
-    Now we simply find the thickness of the required lead via Figure 11, taken from the NCRP 49 report \cite{simmons1978structural}. We find that the thicknesses of lead, $T_{i}$, for each wall are $T_\mathrm{N} = \qty{3.6}{cm}$, $T_\mathrm{E} = \qty{2.4}{cm}$, $T_\mathrm{S} = \qty{1.4}{cm}$, $T_\mathrm{W} = \qty{1.8}{cm}$. The western wall, however, will have shielding for the LINAC, which is thicker than the required amount for brachytherapy. 
+    Now we simply find the thickness of the required lead via Figure 11, taken from the NCRP 49 report \cite{simmons1978structural}. We find that the thicknesses of lead, $T_{i}$, for each wall are $T_\mathrm{N} = \qty{3.6}{cm}$, $T_\mathrm{E} = \qty{2.4}{cm}$, $T_\mathrm{S} = \qty{1.4}{cm}$, $T_\mathrm{W} = \qty{1.8}{cm}$. The western side of the maze, however, will have shielding for the LINAC, which is thicker than the required amount for brachytherapy. 
     \begin{figure}[h!]
         \centering
         \includegraphics[width=0.75\linewidth]{figures/image.png}
     \end{figure}
 
+    \subsection{Determine the length of the maze wall needed such that a door is unnecessary.}
+        We begin by determining the thickness of the maze walls. In the previous section, it was determined that the western wall would be \qty{1.8}{cm} thick with lead shielding. Since the maze needs oblique distance calculations, we recalculate $B$ for the new distance, being from the X in the room, to the centerline of the maze, along a perpendicular line with the wall of the control room (see Figure \ref{brachy}). We also consider only patient scatter, and transmission through the maze wall. This gives a simplified expression for the total dose per week at the entrance of the maze:
+        \begin{align} \label{bigboy}
+            \mathrm{H_{tot}} &= \mathrm{H_{PS}} + \mathrm{H_{LT}} \\
+            &=\frac{a(\theta)WU_G \left(F/400\right)\alpha_1 A_1}{\left( d_\mathrm{sca}d_\mathrm{sec}d_\mathrm{zz} \right)^2} + \frac{L_f W U_G B}{d_L^2}, \nonumber
+        \end{align}
+        where $a(\theta)$ is the scatter fraction for patient-scattered radiation at a given angle, $W$ is the workload, $U_G$ is the use factor, $F$ is the area of the beam at \qty{1}{m} from the patient, $\alpha_1$ is the wall reflection coefficient, $A_1$ is the area of the maze wall cross-section, $d_\mathrm{sca}, d_\mathrm{sec}, d_\mathrm{zz}$ are the distances from the target to the patient, patient to maze wall at the centerline, and total maze distance, respectively. $L_f$ is the head-leakage ratio, $B$ is the new barrier transmission factor, and $d_L$ is the distance for that new barrier transmission factor. 
+
+        $a(\theta)$ was assumed to be 0.2 in accordance with the given assumptions, $W=\qty{1.60}{cGy/wk}$ as before, $U_G = 1$, $F$ was assumed to be the area of the steradian at $\qty{0.1}{m}$ from the patient in the direction of the maze, which was $F = \qty{100}{cm^2}$. \qty{0.1}{m} was chosen for this distance as it was assumed to be the approximate distance from the source to outside the patient. $\alpha_1 = 0.01$ from the given assumptions, $A_1 = (\SI{1.75}{m})(\qty{3.048}{m})$ since the maze width was \qty{1.75}{m}, and the ceiling height was assumed to be \qty{10}{ft}, or \qty{3.048}{m}. $L_f$ was assumed to 0.1\%, and $B$ was calculated as,
+        \begin{align}
+            B = \frac{\left(\qty{0.02}{cGy/week}\right)\left(d_L\right)^2}{\left(\qty{1.60}{cGy/week}\right)\left(0.5\right)\left( 1 \right)}.
+        \end{align}
+        Next, $d_\mathrm{sca} = \qty{0.1}{m}$ from our source-to-air assumption, and from Figure \ref{brachy}, $d_\mathrm{sec} = \qty{5.34}{m}$, and $d_\mathrm{zz} = \qty{4.5}{m} + x$, and $d_L = \sqrt{x^2+\left(2+\frac{1.75}{2}\right)^2}$. Plugging all factors into Equation \ref{bigboy}, we have
+        \begin{align}
+            \mathrm{H_{tot}} =&\frac{\left(0.2\right) \left(\qty{1.60}{cGy/wk}\right)\left(1\right) \left(\frac{\qty{100}{cm^2}}{400}\right)\left(0.01\right) \left((\SI{1.75}{m})(\qty{3.048}{m})\right)}{\left( \left(\qty{0.1}{m}\right)\left(\qty{5.34}{m}\right)\left(\qty{4.5}{m} + x\right) \right)^2} + \nonumber \\ 
+            &\frac{\left(0.1/100\right) \left(\qty{1.60}{cGy/wk}\right) \left(1\right) \left( \frac{\left(\qty{0.02}{cGy/week}\right)\left(d_L\right)^2}{\left(\qty{1.60}{cGy/week}\right)\left(0.5\right)\left( 1 \right)} \right)}{d_L^2}. \nonumber
+        \end{align}
+        Solving for $x$ gives the result of \qty{4.167}{m}, which is the unknown length added to the known $\qty{4.5}{m}$. Therefore the total length of the maze must be at minimum $\qty{8.67}{m}$, or about $\qty{28.5}{ft}$.
     
 \section{Conclusion}
 
